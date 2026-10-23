@@ -82,6 +82,13 @@ export default function BirthdayCake({ onCandleBlown, isExtinguished: externalEx
     }
   };
 
+  // Sync when extinguished externally
+  useEffect(() => {
+    if (externalExtinguished && isLit && !isExtinguished && stage >= 4) {
+      handleExtinguish();
+    }
+  }, [externalExtinguished, stage]);
+
   // Batter stream colors based on current pouring stage
   const pouringStage = stage === 1 ? 1 : stage === 2 ? 2 : stage === 3 ? 3 : 0;
 
@@ -98,8 +105,8 @@ export default function BirthdayCake({ onCandleBlown, isExtinguished: externalEx
         </button>
       )}
 
-      {/* Main Cake Stage Canvas */}
-      <div className="relative flex flex-col items-center justify-end w-full h-[230px] sm:h-[245px] pb-1 overflow-visible">
+      {/* Main Cake Stage Canvas — sized properly to fit stand, tiers, and candle without overflow */}
+      <div className="relative flex flex-col items-center justify-end w-full h-[300px] sm:h-[335px] pb-1 overflow-visible">
 
         {/* ─── ANIMATED BATTER SPOUT & STREAM ─── */}
         <AnimatePresence>
@@ -110,7 +117,7 @@ export default function BirthdayCake({ onCandleBlown, isExtinguished: externalEx
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, scaleY: 0 }}
               transition={{ duration: 0.25 }}
-              className="absolute top-0 z-40 flex flex-col items-center pointer-events-none"
+              className="absolute top-2 sm:top-4 z-40 flex flex-col items-center pointer-events-none"
             >
               {/* Mixing Bowl / Pouring Spout */}
               <motion.div
@@ -130,10 +137,10 @@ export default function BirthdayCake({ onCandleBlown, isExtinguished: externalEx
                 style={{ transformOrigin: "top center" }}
                 className={`w-2.5 rounded-full shadow-inner ${
                   pouringStage === 1
-                    ? "h-[125px] bg-gradient-to-b from-amber-300 via-amber-400 to-orange-400"
+                    ? "h-[145px] sm:h-[165px] bg-gradient-to-b from-amber-300 via-amber-400 to-orange-400"
                     : pouringStage === 2
-                    ? "h-[90px] bg-gradient-to-b from-purple-200 via-purple-300 to-purple-400"
-                    : "h-[50px] bg-gradient-to-b from-pink-200 via-pink-400 to-pink-500"
+                    ? "h-[105px] sm:h-[120px] bg-gradient-to-b from-purple-200 via-purple-300 to-purple-400"
+                    : "h-[65px] sm:h-[75px] bg-gradient-to-b from-pink-200 via-pink-400 to-pink-500"
                 }`}
               />
 
@@ -147,8 +154,8 @@ export default function BirthdayCake({ onCandleBlown, isExtinguished: externalEx
           )}
         </AnimatePresence>
 
-        {/* ─── THE SINGLE CANDLE ─── */}
-        <div className="relative z-30 h-16 flex items-end justify-center mb-[-6px]">
+        {/* ─── THE SINGLE CANDLE ─── Height accounts for flame, wick, and candle body */}
+        <div className="relative z-30 h-[115px] sm:h-[125px] flex items-end justify-center mb-[-6px]">
           <AnimatePresence>
             {stage >= 4 && (
               <motion.div

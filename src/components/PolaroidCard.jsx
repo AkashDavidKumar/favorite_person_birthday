@@ -68,7 +68,11 @@ export default function PolaroidCard({
           <img
             src={imageSrc}
             alt={memory.alt || memory.caption}
-            className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
+            className="w-full h-full transition-transform duration-300 group-hover:scale-105"
+            style={{
+              objectFit: memory.objectFit || "cover",
+              objectPosition: memory.objectPosition || "center",
+            }}
             loading="lazy"
             onError={() => setImgError(true)}
           />

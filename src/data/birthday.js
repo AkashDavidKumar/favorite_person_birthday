@@ -26,16 +26,20 @@ export const birthday = {
   challengeCompletedSubtext: "Happiness update installed.",
 
   // Scene 6 — Personal Letter
-  letterOpening: "Happy Birthday to one of my favourite people!",
-  letterParagraphs: [
-    "Life gives us so many different people, but only a few become the ones we can laugh with, share our random thoughts with, and create memories we'll talk about for years.",
-    "Thank you for being part of my life, for all the laughs, for the little moments, and for the memories that mean more than I can explain.",
-    "I hope this new year of your life brings you peace, happiness, success, and all the beautiful things you deserve.",
-    "No matter how busy life gets or how much things change, I hope we never run out of stupid things to laugh about.",
-    "Stay the amazing person you are. Keep smiling, keep dreaming, and never forget how much your friendship means to me.",
-    "Happy Birthday once again. ❤️",
-  ],
-  letterSignature: "With lots of love and friendship,",
+  
+letterOpening: "Happy Birthday to someone I'm truly grateful to have met! 💖",
+
+letterParagraphs: [
+  "We studied at the same college for years, but I never imagined that a few conversations would turn into such a beautiful friendship.",
+  "When I felt alone, you slowly became someone I could share everything with. Thank you for listening, understanding me, and bringing happiness into my life.",
+  "I know I've hurt you sometimes by misunderstanding you or getting upset when you were busy. I'm truly sorry, and thank you for still being my friend.",
+  "You came into my life unexpectedly, but you've become one of the most special parts of my college memories.",
+  "I hope your life is filled with happiness, success, beautiful memories, and endless reasons to smile. No matter how life changes, I'll always cherish our friendship.",
+  "Happy Birthday, Harshini! Thank you for being you. 💖",
+],
+
+letterSignature: "With lots of love, gratitude, and friendship, 💖",
+
 
   // Scene 7 — Final Farewell Screen
   farewellPreHeading: "A LITTLE NOTE BEFORE YOU GO ✨",

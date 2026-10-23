@@ -52,7 +52,7 @@ export default function RandomCuteMessages() {
   if (prefersReduced || !visible || !currentMessage) return null;
 
   return (
-    <div className="fixed bottom-4 right-4 z-40 pointer-events-auto max-w-[calc(100vw-32px)] sm:max-w-xs">
+    <div className="fixed bottom-3 right-3 sm:bottom-4 sm:right-4 z-40 pointer-events-none max-w-[270px] sm:max-w-xs">
       <AnimatePresence>
         {visible && (
           <motion.div
@@ -60,7 +60,7 @@ export default function RandomCuteMessages() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 15, scale: 0.9 }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
-            className="flex items-center gap-2 px-3.5 py-2.5 rounded-full bg-white/95 border-2 border-pink-200/90 shadow-lg shadow-purple-200/50 backdrop-blur-md"
+            className="pointer-events-auto flex items-center gap-2 px-3 sm:px-3.5 py-2 rounded-full bg-white/95 border-2 border-pink-200/90 shadow-lg shadow-purple-200/50 backdrop-blur-md"
           >
             <span className="text-pink-500 animate-pulse text-sm">✨</span>
             <p className="font-fun text-xs text-purple-900 font-semibold tracking-wide flex-1 select-none">
