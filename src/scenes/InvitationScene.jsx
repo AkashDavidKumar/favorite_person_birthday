@@ -2,7 +2,8 @@ import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import confetti from "canvas-confetti";
 import { birthday } from "../data/birthday";
-import GlitterBackground from "../components/GlitterBackground";
+import MagicBackground from "../components/MagicBackground";
+import FloatingSticker from "../components/FloatingSticker";
 import { useReducedMotionPreference } from "../hooks/useReducedMotionPreference";
 
 export default function InvitationScene({ onNext }) {
@@ -20,14 +21,14 @@ export default function InvitationScene({ onNext }) {
     setTimeout(() => {
       setPhase("opened");
 
-      // Brief, tasteful sparkle celebration when the card is fully revealed
+      // Tasteful playful sparkle celebration when the card is fully revealed
       if (!prefersReduced) {
         confetti({
-          particleCount: 45,
-          spread: 60,
+          particleCount: 50,
+          spread: 70,
           origin: { y: 0.55 },
-          colors: ["#f472b6", "#a78bfa", "#fde047", "#ffffff", "#c084fc"],
-          scalar: 0.85,
+          colors: ["#f472b6", "#a78bfa", "#fde047", "#ffffff", "#c084fc", "#6ee7b7"],
+          scalar: 0.9,
         });
       }
     }, 600);
@@ -35,7 +36,7 @@ export default function InvitationScene({ onNext }) {
     // Keep the greeting readable long enough to be appreciated, then smoothly transition
     setTimeout(() => {
       onNext();
-    }, 3600);
+    }, 3800);
   };
 
   const isOpened = phase === "opened";
@@ -48,19 +49,19 @@ export default function InvitationScene({ onNext }) {
         background: "linear-gradient(135deg, #fce7f3 0%, #ede9fe 50%, #f5e8fc 100%)",
       }}
     >
-      <GlitterBackground variant="blush" count={20} />
+      <MagicBackground theme="invitation" />
 
-      {/* Ambient background glows */}
-      <div
-        className="pointer-events-none absolute -top-32 -left-32 w-80 sm:w-96 h-80 sm:h-96 rounded-full"
-        style={{ background: "radial-gradient(circle, rgba(221, 214, 254, 0.4), transparent 70%)" }}
-        aria-hidden="true"
-      />
-      <div
-        className="pointer-events-none absolute -bottom-28 -right-28 w-80 sm:w-96 h-80 sm:h-96 rounded-full"
-        style={{ background: "radial-gradient(circle, rgba(252, 231, 243, 0.5), transparent 70%)" }}
-        aria-hidden="true"
-      />
+      {/* Scrapbook doodle stickers top corners */}
+      <div className="absolute top-4 left-4 z-20 hidden sm:block">
+        <FloatingSticker rotation={-6} color="pink" className="text-xs">
+          TOP SECRET 🤫
+        </FloatingSticker>
+      </div>
+      <div className="absolute top-4 right-4 z-20 hidden sm:block">
+        <FloatingSticker rotation={5} color="yellow" className="text-xs">
+          VIP ACCESS ONLY 🎀
+        </FloatingSticker>
+      </div>
 
       {/* ─── 1 & 2. UPPER INVITATION HEADING & SUBTEXT ─── */}
       <div className="relative z-10 flex flex-col items-center text-center max-w-lg w-full pt-2 sm:pt-4">
@@ -120,12 +121,15 @@ export default function InvitationScene({ onNext }) {
                   ? { duration: 0.1 }
                   : { duration: 0.8, ease: [0.16, 1, 0.3, 1] }
               }
-              className="w-[250px] sm:w-[260px] rounded-2xl p-5 text-center shadow-2xl border border-pink-100"
+              className="w-[250px] sm:w-[260px] rounded-2xl p-5 text-center shadow-2xl border-2 border-pink-100 relative"
               style={{
                 background: "linear-gradient(170deg, #ffffff 0%, #fff7fb 60%, #fdf2f8 100%)",
                 boxShadow: "0 14px 35px -8px rgba(168, 85, 247, 0.3), 0 4px 12px rgba(0, 0, 0, 0.06)",
               }}
             >
+              {/* Cute Washi Tape Strip at top */}
+              <div className="washi-tape-pink w-16 -top-2.5 left-1/2 -translate-x-1/2 absolute" />
+
               {/* Header Icon */}
               <div className="text-3xl mb-1.5" aria-hidden="true">
                 🎂💖
@@ -138,9 +142,9 @@ export default function InvitationScene({ onNext }) {
                 <span className="text-pink-600 font-extrabold">{birthday.friendName}!</span>
               </h2>
 
-              <p className="text-xs text-purple-500 font-medium mt-2">
-                Your universe awaits ✨
-              </p>
+              <div className="inline-block px-2.5 py-0.5 mt-2 rounded-full bg-pink-100 text-pink-700 text-[11px] font-bold border border-pink-200 font-fun">
+                ✨ Best Friend Edition ✨
+              </div>
             </motion.div>
           </div>
 

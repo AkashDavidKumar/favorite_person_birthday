@@ -2,7 +2,8 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { RotateCcw, Heart } from "lucide-react";
 import { birthday } from "../data/birthday";
-import GlitterBackground from "../components/GlitterBackground";
+import MagicBackground from "../components/MagicBackground";
+import FloatingSticker from "../components/FloatingSticker";
 import PrimaryButton from "../components/PrimaryButton";
 
 export default function BirthdayFinaleScene({ onRestart }) {
@@ -19,16 +20,19 @@ export default function BirthdayFinaleScene({ onRestart }) {
         background: "linear-gradient(165deg, #181427 0%, #231b38 50%, #120e20 100%)",
       }}
     >
-      <GlitterBackground variant="dark" count={16} />
+      <MagicBackground theme="farewell" />
 
-      {/* Gentle center glow */}
-      <div
-        className="pointer-events-none absolute w-[420px] h-[420px] rounded-full opacity-25"
-        style={{
-          background: "radial-gradient(circle, #a78bfa 0%, rgba(236, 72, 153, 0.15) 50%, transparent 70%)",
-        }}
-        aria-hidden="true"
-      />
+      {/* Floating stickers for dreamy night vibe */}
+      <div className="absolute top-6 left-6 z-20 hidden sm:block">
+        <FloatingSticker rotation={-4} color="dark" className="text-xs">
+          THE END (FOR NOW) 🌙
+        </FloatingSticker>
+      </div>
+      <div className="absolute top-6 right-6 z-20 hidden sm:block">
+        <FloatingSticker rotation={4} color="pink" className="text-xs">
+          FOREVER BESTIES 💗
+        </FloatingSticker>
+      </div>
 
       <div className="relative z-10 text-center max-w-lg w-full mx-auto my-auto py-4">
         <AnimatePresence mode="wait">

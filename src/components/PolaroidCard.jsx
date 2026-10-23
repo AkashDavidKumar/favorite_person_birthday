@@ -22,6 +22,8 @@ export default function PolaroidCard({
   const imageSrc = resolveImagePath(memory.image);
   const hasImage = imageSrc && !imgError;
 
+  const washiClass = memory.tapeType || "washi-tape-pink";
+
   return (
     <motion.button
       type="button"
@@ -29,22 +31,39 @@ export default function PolaroidCard({
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       whileHover={{
-        scale: 1.04,
-        zIndex: 10,
+        scale: 1.05,
+        rotate: 0,
+        zIndex: 20,
         transition: { duration: 0.2 },
       }}
-      whileTap={{ scale: 0.98 }}
+      whileTap={{ scale: 0.97 }}
       transition={{ duration: 0.45, delay: index * 0.06 }}
-      className="bg-white p-3 pb-5 rounded-md cursor-pointer relative group text-left transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 w-full max-w-[270px] sm:max-w-[260px] mx-auto box-border"
+      className="bg-white p-3 pb-4 rounded-xl cursor-pointer relative group text-left transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 w-full max-w-[270px] sm:max-w-[260px] mx-auto box-border border border-pink-100/80"
       style={{
-        boxShadow: "0 8px 20px -4px rgba(53, 43, 72, 0.12), 0 4px 8px -2px rgba(0, 0, 0, 0.05)",
+        boxShadow: "0 10px 25px -4px rgba(79, 70, 229, 0.12), 0 4px 10px -2px rgba(0, 0, 0, 0.05)",
         background: "linear-gradient(180deg, #ffffff 0%, #fffdfa 100%)",
         transform: `rotate(${rotation}deg)`,
       }}
       aria-label={`Open photo memory: ${memory.caption}`}
     >
+      {/* Scrapbook Washi Tape Strip across the top */}
+      <div className={`${washiClass} w-20 -top-2.5 left-1/2 -translate-x-1/2 absolute z-10`} />
+
+      {/* Scrapbook Corner Sticker if available */}
+      {memory.sticker && (
+        <div
+          className="absolute -bottom-2 -right-2 z-10 px-2 py-0.5 rounded-full text-[10px] font-black tracking-wider uppercase shadow-md border border-white/80 pointer-events-none transform rotate-3"
+          style={{
+            background: "linear-gradient(135deg, #fce7f3 0%, #ede9fe 100%)",
+            color: "#831843",
+          }}
+        >
+          {memory.sticker}
+        </div>
+      )}
+
       {/* 1. The Photograph Frame */}
-      <div className="w-full aspect-square overflow-hidden bg-purple-50/60 rounded-[3px] relative shadow-inner">
+      <div className="w-full aspect-square overflow-hidden bg-purple-50/60 rounded-lg relative shadow-inner mt-1">
         {hasImage ? (
           <img
             src={imageSrc}
@@ -75,9 +94,9 @@ export default function PolaroidCard({
         </div>
       </div>
 
-      {/* 2. The Caption (strictly no date line) */}
-      <div className="pt-3 px-1 min-h-[2.75rem] flex items-center">
-        <p className="text-xs sm:text-sm text-gray-800 font-medium leading-snug line-clamp-2 w-full">
+      {/* 2. The Caption (strictly no date line, cute friend scrapbook font) */}
+      <div className="pt-3 px-1 min-h-[2.5rem] flex flex-col justify-center">
+        <p className="text-xs sm:text-sm text-gray-800 font-medium leading-snug line-clamp-2 w-full font-fun">
           {memory.caption}
         </p>
       </div>

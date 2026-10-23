@@ -7,6 +7,7 @@ import BestFriendAwardsScene from "./scenes/BestFriendAwardsScene";
 import BirthdayChallengeScene from "./scenes/BirthdayChallengeScene";
 import PersonalLetterScene from "./scenes/PersonalLetterScene";
 import BirthdayFinaleScene from "./scenes/BirthdayFinaleScene";
+import RandomCuteMessages from "./components/RandomCuteMessages";
 
 // 7 Discrete Scenes
 const SCENES = {
@@ -95,6 +96,9 @@ export default function App() {
 
   return (
     <div className="grain-overlay min-h-[100svh] min-h-screen w-full relative overflow-x-hidden">
+      {/* Random cute toast messages appearing periodically */}
+      <RandomCuteMessages />
+
       {/* Discrete Scene Transitions with smooth fade and slight scale */}
       <AnimatePresence mode="wait">
         <motion.div

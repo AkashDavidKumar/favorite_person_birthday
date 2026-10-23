@@ -1,43 +1,8 @@
 import { motion } from "motion/react";
 import { birthday } from "../data/birthday";
-import GlitterBackground from "../components/GlitterBackground";
+import MagicBackground from "../components/MagicBackground";
+import FloatingSticker from "../components/FloatingSticker";
 import PrimaryButton from "../components/PrimaryButton";
-
-const STARS = Array.from({ length: 14 }, (_, i) => ({
-  id: i,
-  x: (Math.sin(i * 17) * 0.5 + 0.5) * 94 + 3,
-  y: (Math.sin(i * 13 + 2) * 0.5 + 0.5) * 88 + 3,
-  size: (Math.sin(i * 7) * 0.5 + 0.5) * 10 + 6,
-  delay: (Math.sin(i * 5) * 0.5 + 0.5) * 2.5,
-  duration: (Math.sin(i * 11) * 0.5 + 0.5) * 2.5 + 2.5,
-}));
-
-const CLOUDS = [
-  { x: 4, y: 8, size: 75, delay: 0 },
-  { x: 74, y: 16, size: 90, delay: 1.2 },
-  { x: 80, y: 65, size: 70, delay: 0.6 },
-];
-
-function Cloud({ x, y, size, delay }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: [0, 0.45, 0.45, 0] }}
-      transition={{ delay, duration: 10, repeat: Infinity, repeatDelay: 3 }}
-      style={{
-        position: "absolute",
-        left: `${x}%`,
-        top: `${y}%`,
-        width: size,
-        height: size * 0.55,
-        borderRadius: "50%",
-        backgroundColor: "rgba(255,255,255,0.6)",
-        filter: "blur(8px)",
-      }}
-      aria-hidden="true"
-    />
-  );
-}
 
 export default function BirthdayWorldScene({ onNext }) {
   return (
@@ -47,32 +12,31 @@ export default function BirthdayWorldScene({ onNext }) {
         background: "linear-gradient(160deg, #ede9fe 0%, #fce7f3 45%, #fff7ed 100%)",
       }}
     >
-      <GlitterBackground variant="celestial" count={18} />
+      <MagicBackground theme="universe" />
 
-      {/* Ambient clouds */}
-      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
-        {CLOUDS.map((c, i) => (
-          <Cloud key={i} {...c} />
-        ))}
+      {/* Floating Sticker Badges for Playful Scrapbook Feel */}
+      <div className="absolute top-6 left-4 sm:left-12 z-20 hidden xs:block">
+        <FloatingSticker rotation={-5} color="pink">
+          MAIN CHARACTER ENERGY ✨
+        </FloatingSticker>
       </div>
 
-      {/* Ambient stars */}
-      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
-        {STARS.map((s) => (
-          <motion.div
-            key={s.id}
-            animate={{ opacity: [0.2, 0.9, 0.2], scale: [0.8, 1.25, 0.8] }}
-            transition={{ duration: s.duration, delay: s.delay, repeat: Infinity, ease: "easeInOut" }}
-            style={{
-              position: "absolute",
-              left: `${s.x}%`,
-              top: `${s.y}%`,
-              fontSize: s.size,
-            }}
-          >
-            ✨
-          </motion.div>
-        ))}
+      <div className="absolute top-6 right-4 sm:right-12 z-20 hidden xs:block">
+        <FloatingSticker rotation={4} color="yellow">
+          🚨 BIRTHDAY DETECTED! 💗
+        </FloatingSticker>
+      </div>
+
+      <div className="absolute bottom-8 left-4 sm:left-14 z-20 hidden sm:block">
+        <FloatingSticker rotation={-3} color="lavender">
+          100% ICONIC. 0% NORMAL. 😂
+        </FloatingSticker>
+      </div>
+
+      <div className="absolute bottom-8 right-4 sm:right-14 z-20 hidden sm:block">
+        <FloatingSticker rotation={6} color="mint">
+          LEVEL 100 BESTIE 👑
+        </FloatingSticker>
       </div>
 
       {/* Main Content — Compact, balanced vertical layout for mobile */}

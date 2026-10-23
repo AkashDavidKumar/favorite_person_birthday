@@ -3,7 +3,8 @@ import { motion, AnimatePresence } from "motion/react";
 import { birthday } from "../data/birthday";
 import BirthdayCake from "../components/BirthdayCake";
 import PrimaryButton from "../components/PrimaryButton";
-import GlitterBackground from "../components/GlitterBackground";
+import MagicBackground from "../components/MagicBackground";
+import FloatingSticker from "../components/FloatingSticker";
 
 export default function BirthdayChallengeScene({ onNext }) {
   const [challengeComplete, setChallengeComplete] = useState(false);
@@ -15,16 +16,19 @@ export default function BirthdayChallengeScene({ onNext }) {
         background: "linear-gradient(160deg, #fff7ed 0%, #fde68a18 40%, #fce7f3 100%)",
       }}
     >
-      <GlitterBackground variant="warm" count={18} />
+      <MagicBackground theme="cake" />
 
-      {/* Warm ambient radial glows */}
-      <div
-        className="pointer-events-none absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] rounded-full opacity-20"
-        style={{
-          background: "radial-gradient(circle, #fbbf24, transparent 70%)",
-        }}
-        aria-hidden="true"
-      />
+      {/* Playful Scrapbook stickers */}
+      <div className="absolute top-6 left-6 z-20 hidden sm:block">
+        <FloatingSticker rotation={-4} color="yellow">
+          100% CALORIE-FREE 🍰
+        </FloatingSticker>
+      </div>
+      <div className="absolute top-6 right-6 z-20 hidden sm:block">
+        <FloatingSticker rotation={5} color="mint">
+          WISH GUARANTEE CERTIFIED ✨
+        </FloatingSticker>
+      </div>
 
       <div className="relative z-10 max-w-3xl w-full mx-auto text-center flex flex-col items-center">
         {/* Heading */}
@@ -35,13 +39,13 @@ export default function BirthdayChallengeScene({ onNext }) {
           className="mb-6"
         >
           <span className="text-4xl mb-1 inline-block" aria-hidden="true">🎂</span>
-          <h2 className="font-display font-bold text-3xl sm:text-4xl text-purple-900 mb-2">
+          <h2 className="font-display font-black text-3xl sm:text-4xl text-purple-900 mb-2">
             {birthday.challengeTitle}
           </h2>
           <p className="text-purple-600 font-script text-xl sm:text-2xl mb-1">
             For Harshini 🌟
           </p>
-          <p className="text-gray-600 text-sm sm:text-base max-w-md mx-auto leading-relaxed">
+          <p className="text-gray-600 text-sm sm:text-base max-w-md mx-auto leading-relaxed font-fun">
             {birthday.challengeSubtext}
           </p>
         </motion.div>

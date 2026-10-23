@@ -1,7 +1,8 @@
 import { motion } from "motion/react";
 import { birthday } from "../data/birthday";
 import LetterCard from "../components/LetterCard";
-import GlitterBackground from "../components/GlitterBackground";
+import MagicBackground from "../components/MagicBackground";
+import FloatingSticker from "../components/FloatingSticker";
 
 export default function PersonalLetterScene({ onNext }) {
   return (
@@ -11,16 +12,19 @@ export default function PersonalLetterScene({ onNext }) {
         background: "linear-gradient(160deg, #fff7ed 0%, #fdf2f8 50%, #fef3c7 100%)",
       }}
     >
-      <GlitterBackground variant="parchment" count={18} />
+      <MagicBackground theme="letter" />
 
-      {/* Warm ambient parchment glow */}
-      <div
-        className="pointer-events-none fixed top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-96 rounded-full opacity-25"
-        style={{
-          background: "radial-gradient(circle, #fde68a, transparent 75%)",
-        }}
-        aria-hidden="true"
-      />
+      {/* Playful Scrapbook stickers */}
+      <div className="absolute top-4 left-4 z-20 hidden sm:block">
+        <FloatingSticker rotation={-5} color="pink" className="text-xs">
+          HANDLE WITH CARE 💌
+        </FloatingSticker>
+      </div>
+      <div className="absolute top-4 right-4 z-20 hidden sm:block">
+        <FloatingSticker rotation={4} color="yellow" className="text-xs">
+          WORDS FROM THE HEART ❤️
+        </FloatingSticker>
+      </div>
 
       <div className="relative z-10 max-w-2xl w-full mx-auto">
         {/* Header Intro with clear breathing room */}
@@ -33,11 +37,11 @@ export default function PersonalLetterScene({ onNext }) {
           <span className="text-4xl" aria-hidden="true">
             📜
           </span>
-          <h2 className="font-display font-bold text-3xl sm:text-4xl text-amber-950 mt-2">
+          <h2 className="font-display font-black text-3xl sm:text-4xl text-amber-950 mt-2">
             A Royal Letter for Harshini
           </h2>
           <p className="text-amber-800/80 font-script text-xl mt-1">
-            Delivered with endless love & laughter
+            Handwritten with endless memories, laughter & love 🎀
           </p>
         </motion.div>
 

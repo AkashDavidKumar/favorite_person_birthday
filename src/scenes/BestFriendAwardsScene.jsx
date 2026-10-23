@@ -2,7 +2,8 @@ import { motion } from "motion/react";
 import { awards } from "../data/awards";
 import SurpriseBox from "../components/SurpriseBox";
 import PrimaryButton from "../components/PrimaryButton";
-import GlitterBackground from "../components/GlitterBackground";
+import MagicBackground from "../components/MagicBackground";
+import FloatingSticker from "../components/FloatingSticker";
 
 export default function BestFriendAwardsScene({ onNext }) {
   return (
@@ -12,9 +13,19 @@ export default function BestFriendAwardsScene({ onNext }) {
         background: "linear-gradient(160deg, #ede9fe 0%, #fce7f3 60%, #fff7ed 100%)",
       }}
     >
-      <GlitterBackground variant="golden" count={18} />
+      <MagicBackground theme="awards" />
 
       <div className="relative z-10 max-w-4xl mx-auto w-full my-auto">
+        {/* Scrapbook Jury Badges */}
+        <div className="flex justify-center gap-2 mb-3">
+          <FloatingSticker rotation={-3} color="yellow" className="text-xs">
+            100% UNBIASED JURY ⚖️
+          </FloatingSticker>
+          <FloatingSticker rotation={4} color="pink" className="text-xs">
+            HARSHINI CLEAN SWEEP 🥇
+          </FloatingSticker>
+        </div>
+
         {/* Heading */}
         <motion.div
           initial={{ opacity: 0, y: -16 }}
@@ -25,14 +36,14 @@ export default function BestFriendAwardsScene({ onNext }) {
           <span className="text-3xl sm:text-4xl" aria-hidden="true">
             🏆
           </span>
-          <h2 className="font-display font-bold text-2xl sm:text-4xl text-purple-900 mt-1">
+          <h2 className="font-display font-black text-2xl sm:text-4xl text-purple-900 mt-1">
             Best Friend Awards
           </h2>
           <p className="text-purple-600 font-script text-lg sm:text-xl mt-0.5">
-            Special Honours for Harshini
+            The Official & Prestigious Honors for Harshini 🎀
           </p>
           <p className="text-gray-500 mt-1.5 text-xs sm:text-sm max-w-xs sm:max-w-md mx-auto leading-relaxed">
-            Officially certified. Highly prestigious. Tap each surprise box to unlock her awards!
+            Unwrap each box to reveal her prestigious certificates! No other nominations were considered. 😂
           </p>
         </motion.div>
 

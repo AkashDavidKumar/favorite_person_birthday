@@ -4,7 +4,8 @@ import { memories } from "../data/memories";
 import PolaroidCard from "../components/PolaroidCard";
 import PhotoLightbox from "../components/PhotoLightbox";
 import PrimaryButton from "../components/PrimaryButton";
-import GlitterBackground from "../components/GlitterBackground";
+import MagicBackground from "../components/MagicBackground";
+import FloatingSticker from "../components/FloatingSticker";
 
 // Controlled gentle rotations that look natural and won't clip on small screens
 const ROTATIONS = [-1.5, 1.5, -1, 1.5, -1.5, 1, -1, 1];
@@ -40,7 +41,7 @@ export default function MemoryMuseumScene({ onNext }) {
           background: "linear-gradient(180deg, #fff7ed 0%, #fce7f3 50%, #ede9fe 100%)",
         }}
       >
-        <GlitterBackground variant="pastel" count={16} />
+        <MagicBackground theme="museum" />
 
         <div className="relative z-10 max-w-5xl mx-auto w-full">
           {/* Header */}
@@ -48,19 +49,28 @@ export default function MemoryMuseumScene({ onNext }) {
             initial={{ opacity: 0, y: -16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="text-center mb-6 sm:mb-8"
+            className="text-center mb-6 sm:mb-8 relative"
           >
+            <div className="flex justify-center gap-2 mb-2">
+              <FloatingSticker rotation={-4} color="mint" className="text-xs">
+                ARCHIVE OF BEST MEMORIES 📂
+              </FloatingSticker>
+              <FloatingSticker rotation={3} color="pink" className="text-xs hidden sm:inline-flex">
+                100% UNFILTERED 🎀
+              </FloatingSticker>
+            </div>
+
             <span className="text-3xl sm:text-4xl" aria-hidden="true">
               🖼️
             </span>
-            <h2 className="font-display font-bold text-2xl sm:text-4xl text-purple-900 mt-1">
+            <h2 className="font-display font-black text-2xl sm:text-4xl text-purple-900 mt-1">
               The Friendship Museum
             </h2>
             <p className="text-purple-600 font-script text-lg sm:text-xl mt-0.5">
-              For Harshini — our favourite smiles & moments
+              Harshini's Little Scrapbook of Chaos & Love 💗
             </p>
             <p className="text-gray-500 mt-1.5 text-xs sm:text-sm max-w-sm sm:max-w-md mx-auto leading-relaxed">
-              A carefully curated collection of the happiest days, family warmth, and endless memories.
+              Tap any photo to zoom in! Every photo has a story, an inside joke, or pure golden energy. ✨
             </p>
           </motion.div>
 

@@ -143,14 +143,32 @@ export default function SurpriseBox({ award, index }) {
       setIsOpen(true);
       setIsOpeningAnim(false);
 
-      // Distinctive celebration confetti
-      confetti({
-        particleCount: 70,
-        spread: 60,
-        origin: { y: 0.65 },
-        colors: [award.ribbonColor, award.accentColor, "#fbbf24", "#ffffff"],
-        scalar: 0.9,
-      });
+      // Distinctive celebration confetti per award
+      if (award.burstType === "hearts") {
+        confetti({
+          particleCount: 65,
+          spread: 70,
+          origin: { y: 0.62 },
+          colors: ["#ec4899", "#f472b6", "#fda4af", "#ff69b4", "#ffffff"],
+          scalar: 1.1,
+        });
+      } else if (award.burstType === "stars") {
+        confetti({
+          particleCount: 65,
+          spread: 70,
+          origin: { y: 0.62 },
+          colors: ["#8b5cf6", "#a78bfa", "#c4b5fd", "#fde047", "#ffffff"],
+          scalar: 1.0,
+        });
+      } else {
+        confetti({
+          particleCount: 85,
+          spread: 90,
+          origin: { y: 0.62 },
+          colors: ["#10b981", "#3b82f6", "#f59e0b", "#ec4899", "#8b5cf6", "#fde047"],
+          scalar: 1.05,
+        });
+      }
     }, 500);
   };
 
@@ -234,7 +252,7 @@ export default function SurpriseBox({ award, index }) {
                 {/* Mystery hint badge */}
                 <div className="absolute bottom-3 inset-x-0 text-center z-10">
                   <span
-                    className="text-xs font-semibold px-3 py-1 rounded-full shadow-sm backdrop-blur-sm"
+                    className="text-xs font-semibold px-3 py-1 rounded-full shadow-sm backdrop-blur-sm font-fun"
                     style={{
                       backgroundColor: "#ffffffea",
                       color: award.accentColor,
@@ -248,7 +266,7 @@ export default function SurpriseBox({ award, index }) {
             </motion.button>
           </motion.div>
         ) : (
-          /* ================= OPENED REVEAL CARD ================= */
+          /* ================= OPENED REVEAL CARD (HANDMADE CERTIFICATE LOOK) ================= */
           <motion.div
             key="box-open"
             initial={{ scale: 0.8, opacity: 0, y: 20 }}
@@ -256,15 +274,18 @@ export default function SurpriseBox({ award, index }) {
             transition={{ type: "spring", stiffness: 220, damping: 18 }}
             className="w-full flex flex-col items-center"
           >
-            {/* Opened box frame displaying custom artwork */}
+            {/* Opened box frame displaying custom artwork with certificate feel */}
             <div
-              className="w-48 h-48 sm:w-52 sm:h-52 rounded-3xl flex flex-col items-center justify-center p-4 shadow-2xl text-center relative overflow-hidden"
+              className="w-48 h-48 sm:w-52 sm:h-52 rounded-3xl flex flex-col items-center justify-center p-4 shadow-2xl text-center relative overflow-hidden border-2 border-dashed"
               style={{
                 background: `linear-gradient(150deg, #ffffff 0%, ${award.boxColor} 60%, #fff7ed 100%)`,
-                border: `2px solid ${award.accentColor}66`,
+                borderColor: `${award.accentColor}88`,
                 boxShadow: `0 14px 34px -8px ${award.accentColor}44`,
               }}
             >
+              {/* Cute Washi Tape at top */}
+              <div className="washi-tape-yellow w-16 -top-2 left-1/2 -translate-x-1/2 absolute z-10" />
+
               {/* Internal burst particles */}
               <div
                 className="absolute inset-0 opacity-30 pointer-events-none"
@@ -276,16 +297,23 @@ export default function SurpriseBox({ award, index }) {
               {/* Custom theme illustration */}
               <AwardArtwork awardId={award.id} />
 
-              {/* Small ribbon badge */}
-              <span
-                className="mt-3 text-[10px] font-bold tracking-widest uppercase px-2.5 py-0.5 rounded-full"
-                style={{
-                  backgroundColor: `${award.accentColor}18`,
-                  color: award.accentColor,
-                }}
-              >
-                {award.ribbonLabel}
-              </span>
+              {/* Small ribbon badge & certificate sticker */}
+              <div className="mt-3 flex items-center gap-1.5 z-10">
+                <span
+                  className="text-[10px] font-black tracking-widest uppercase px-2.5 py-0.5 rounded-full"
+                  style={{
+                    backgroundColor: `${award.accentColor}18`,
+                    color: award.accentColor,
+                  }}
+                >
+                  {award.ribbonLabel}
+                </span>
+                {award.sticker && (
+                  <span className="text-[10px] font-black bg-pink-100 text-pink-700 px-2 py-0.5 rounded-full border border-pink-200 shadow-sm font-fun">
+                    {award.sticker}
+                  </span>
+                )}
+              </div>
             </div>
 
             {/* Award Title and Description ONLY RENDERED AFTER OPENING */}
