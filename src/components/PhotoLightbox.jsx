@@ -83,13 +83,13 @@ export default function PhotoLightbox({ memories, activeIndex, onClose, onPrev, 
             className="relative z-10 bg-white rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl max-w-lg w-full flex flex-col max-h-[92svh] max-h-[92vh]"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Close button with safe margins */}
+            {/* Close button with safe touch target (min 44x44px) */}
             <button
               onClick={onClose}
-              className="absolute top-3 right-3 z-30 bg-black/50 hover:bg-black/70 text-white rounded-full p-2 sm:p-2.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+              className="absolute top-3 right-3 z-30 bg-black/60 hover:bg-black/80 text-white rounded-full min-w-[44px] min-h-[44px] flex items-center justify-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white cursor-pointer"
               aria-label="Close photo"
             >
-              <X size={18} />
+              <X size={20} />
             </button>
 
             {/* Image container */}
@@ -109,28 +109,28 @@ export default function PhotoLightbox({ memories, activeIndex, onClose, onPrev, 
                   }}
                 >
                   <span className="text-5xl opacity-50">📷</span>
-                  <p className="text-purple-600 font-medium text-sm text-center">
+                  <p className="text-purple-600 font-medium text-sm text-center font-fun">
                     Harshini's Memory
                   </p>
                 </div>
               )}
 
-              {/* Prev / Next controls */}
+              {/* Prev / Next controls with min 44x44px touch targets */}
               {memories.length > 1 && (
                 <>
                   <button
                     onClick={onPrev}
-                    className="absolute left-2.5 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/70 text-white rounded-full p-2.5 sm:p-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white shadow-lg"
+                    className="absolute left-2.5 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/80 text-white rounded-full min-w-[44px] min-h-[44px] flex items-center justify-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white shadow-lg cursor-pointer"
                     aria-label="Previous photo"
                   >
-                    <ChevronLeft size={20} />
+                    <ChevronLeft size={22} />
                   </button>
                   <button
                     onClick={onNext}
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/70 text-white rounded-full p-2.5 sm:p-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white shadow-lg"
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/80 text-white rounded-full min-w-[44px] min-h-[44px] flex items-center justify-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white shadow-lg cursor-pointer"
                     aria-label="Next photo"
                   >
-                    <ChevronRight size={20} />
+                    <ChevronRight size={22} />
                   </button>
                 </>
               )}

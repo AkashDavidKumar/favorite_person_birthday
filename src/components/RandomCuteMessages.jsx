@@ -52,7 +52,7 @@ export default function RandomCuteMessages() {
   if (prefersReduced || !visible || !currentMessage) return null;
 
   return (
-    <div className="fixed bottom-4 right-4 z-40 pointer-events-auto max-w-[280px] sm:max-w-xs">
+    <div className="fixed bottom-4 right-4 z-40 pointer-events-auto max-w-[calc(100vw-32px)] sm:max-w-xs">
       <AnimatePresence>
         {visible && (
           <motion.div

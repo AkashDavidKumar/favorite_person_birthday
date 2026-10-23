@@ -7,26 +7,14 @@ import FloatingSticker from "../components/FloatingSticker";
 export default function PersonalLetterScene({ onNext }) {
   return (
     <div
-      className="min-h-[100svh] min-h-screen w-full px-3 pt-8 pb-20 sm:px-8 flex flex-col items-center justify-start relative overflow-y-auto overflow-x-hidden"
+      className="min-h-[100svh] min-h-screen w-full px-3 pt-6 pb-16 sm:px-8 flex flex-col items-center justify-start relative overflow-y-auto overflow-x-hidden"
       style={{
         background: "linear-gradient(160deg, #fff7ed 0%, #fdf2f8 50%, #fef3c7 100%)",
       }}
     >
       <MagicBackground theme="letter" />
 
-      {/* Playful Scrapbook stickers */}
-      <div className="absolute top-4 left-4 z-20 hidden sm:block">
-        <FloatingSticker rotation={-5} color="pink" className="text-xs">
-          HANDLE WITH CARE 💌
-        </FloatingSticker>
-      </div>
-      <div className="absolute top-4 right-4 z-20 hidden sm:block">
-        <FloatingSticker rotation={4} color="yellow" className="text-xs">
-          WORDS FROM THE HEART ❤️
-        </FloatingSticker>
-      </div>
-
-      <div className="relative z-10 max-w-2xl w-full mx-auto">
+      <div className="relative z-10 max-w-xl w-full mx-auto">
         {/* Header Intro with clear breathing room */}
         <motion.div
           initial={{ opacity: 0, y: -16 }}

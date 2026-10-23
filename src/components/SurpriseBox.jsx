@@ -4,7 +4,7 @@ import confetti from "canvas-confetti";
 import { Sparkles, Crown, Lock, Key, Heart } from "lucide-react";
 
 // Custom decorative artwork rising from the box
-function AwardArtwork({ awardId }) {
+export function AwardArtwork({ awardId }) {
   if (awardId === 1) {
     // Drama Queen: Miniature golden crown, theatrical sparkles, tiny spotlight
     return (
@@ -130,212 +130,142 @@ function AwardArtwork({ awardId }) {
   );
 }
 
-export default function SurpriseBox({ award, index }) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isOpeningAnim, setIsOpeningAnim] = useState(false);
-
-  const handleOpen = () => {
-    if (isOpen || isOpeningAnim) return;
-
-    setIsOpeningAnim(true);
-
-    setTimeout(() => {
-      setIsOpen(true);
-      setIsOpeningAnim(false);
-
-      // Distinctive celebration confetti per award
-      if (award.burstType === "hearts") {
-        confetti({
-          particleCount: 65,
-          spread: 70,
-          origin: { y: 0.62 },
-          colors: ["#ec4899", "#f472b6", "#fda4af", "#ff69b4", "#ffffff"],
-          scalar: 1.1,
-        });
-      } else if (award.burstType === "stars") {
-        confetti({
-          particleCount: 65,
-          spread: 70,
-          origin: { y: 0.62 },
-          colors: ["#8b5cf6", "#a78bfa", "#c4b5fd", "#fde047", "#ffffff"],
-          scalar: 1.0,
-        });
-      } else {
-        confetti({
-          particleCount: 85,
-          spread: 90,
-          origin: { y: 0.62 },
-          colors: ["#10b981", "#3b82f6", "#f59e0b", "#ec4899", "#8b5cf6", "#fde047"],
-          scalar: 1.05,
-        });
-      }
-    }, 500);
+export default function SurpriseBox({ award, index, isOpened, onClick }) {
+  // Select icon for opened state
+  const renderOpenIcon = () => {
+    if (award.id === 1) {
+      return <Crown size={30} className="text-amber-900 drop-shadow" />;
+    }
+    if (award.id === 2) {
+      return <Lock size={28} className="text-white drop-shadow" />;
+    }
+    return <Heart size={28} className="text-white fill-white drop-shadow" />;
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
+    <motion.button
+      type="button"
+      onClick={() => onClick(award)}
+      initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.15, duration: 0.5 }}
-      className="flex flex-col items-center w-64 sm:w-72"
+      transition={{ delay: index * 0.1, duration: 0.4 }}
+      whileHover={{ scale: 1.05, y: -4 }}
+      whileTap={{ scale: 0.95 }}
+      className="flex-1 max-w-[102px] min-[380px]:max-w-[114px] sm:max-w-[130px] flex flex-col items-center cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 rounded-2xl select-none"
+      aria-label={`Gift Box ${index + 1}: ${isOpened ? award.title : "Unopened Surprise"}`}
     >
-      <AnimatePresence mode="wait">
-        {!isOpen ? (
-          /* ================= CLOSED GIFT BOX ================= */
-          <motion.div
-            key="box-closed"
-            animate={
-              isOpeningAnim
-                ? {
-                    x: [-3, 3, -4, 4, -2, 2, 0],
-                    y: [-4, -8, -12, -8, 0],
-                    rotate: [-2, 2, -2, 2, 0],
-                  }
-                : {}
-            }
-            transition={{ duration: 0.5 }}
-            className="flex flex-col items-center"
-          >
-            <motion.button
-              type="button"
-              onClick={handleOpen}
-              whileHover={{ scale: 1.05, y: -4 }}
-              whileTap={{ scale: 0.96 }}
-              className="relative cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 rounded-3xl"
-              aria-label={`Gift Box ${index + 1} - Tap to reveal award`}
-            >
-              {/* Box container */}
-              <div
-                className="w-48 h-48 sm:w-52 sm:h-52 rounded-3xl flex flex-col items-center justify-center relative overflow-hidden shadow-2xl transition-all duration-300"
-                style={{
-                  background: `linear-gradient(145deg, #ffffff 0%, ${award.boxColor} 100%)`,
-                  border: `2px solid ${award.ribbonColor}55`,
-                  boxShadow: `0 12px 30px -8px ${award.accentColor}33, 0 4px 12px rgba(0,0,0,0.06)`,
-                }}
-              >
-                {/* Subtle internal shimmer / glow */}
-                <div
-                  className="absolute inset-0 opacity-40 pointer-events-none"
-                  style={{
-                    background: `radial-gradient(circle at 50% 30%, ${award.ribbonColor}88, transparent 70%)`,
-                  }}
-                />
-
-                {/* Vertical Ribbon */}
-                <div
-                  className="absolute inset-x-0 top-0 bottom-0 w-8 mx-auto shadow-sm"
-                  style={{
-                    background: `linear-gradient(180deg, ${award.ribbonColor}, ${award.accentColor})`,
-                  }}
-                />
-
-                {/* Horizontal Ribbon */}
-                <div
-                  className="absolute inset-y-0 left-0 right-0 h-8 my-auto shadow-sm"
-                  style={{
-                    background: `linear-gradient(90deg, ${award.ribbonColor}, ${award.accentColor})`,
-                  }}
-                />
-
-                {/* Bow Centerpiece */}
-                <motion.div
-                  whileHover={{ rotate: 10, scale: 1.1 }}
-                  className="relative z-10 w-16 h-16 rounded-full flex items-center justify-center text-3xl shadow-xl"
-                  style={{
-                    background: `linear-gradient(135deg, #ffffff 0%, ${award.boxColor} 100%)`,
-                    border: `3px solid ${award.accentColor}`,
-                  }}
-                >
-                  🎁
-                </motion.div>
-
-                {/* Mystery hint badge */}
-                <div className="absolute bottom-3 inset-x-0 text-center z-10">
-                  <span
-                    className="text-xs font-semibold px-3 py-1 rounded-full shadow-sm backdrop-blur-sm font-fun"
-                    style={{
-                      backgroundColor: "#ffffffea",
-                      color: award.accentColor,
-                      border: `1px solid ${award.accentColor}33`,
-                    }}
-                  >
-                    Tap to reveal ✨
-                  </span>
-                </div>
-              </div>
-            </motion.button>
-          </motion.div>
-        ) : (
-          /* ================= OPENED REVEAL CARD (HANDMADE CERTIFICATE LOOK) ================= */
-          <motion.div
-            key="box-open"
-            initial={{ scale: 0.8, opacity: 0, y: 20 }}
-            animate={{ scale: 1, opacity: 1, y: 0 }}
-            transition={{ type: "spring", stiffness: 220, damping: 18 }}
-            className="w-full flex flex-col items-center"
-          >
-            {/* Opened box frame displaying custom artwork with certificate feel */}
+      {/* Gift Box Container */}
+      <div
+        className="w-full aspect-square rounded-2xl flex flex-col items-center justify-center relative overflow-hidden shadow-lg transition-all duration-300 border-2"
+        style={{
+          background: isOpened
+            ? `linear-gradient(145deg, #ffffff 0%, ${award.boxColor} 70%, #ede9fe 100%)`
+            : `linear-gradient(145deg, #ffffff 0%, ${award.boxColor} 100%)`,
+          borderColor: isOpened ? award.accentColor : `${award.ribbonColor}88`,
+          boxShadow: isOpened
+            ? `0 10px 24px -6px ${award.accentColor}44`
+            : `0 8px 20px -6px ${award.accentColor}33`,
+        }}
+      >
+        {!isOpened ? (
+          /* ================= UNOPENED WRAPPED GIFT ================= */
+          <>
+            {/* Subtle inner shimmer */}
             <div
-              className="w-48 h-48 sm:w-52 sm:h-52 rounded-3xl flex flex-col items-center justify-center p-4 shadow-2xl text-center relative overflow-hidden border-2 border-dashed"
+              className="absolute inset-0 opacity-30 pointer-events-none"
               style={{
-                background: `linear-gradient(150deg, #ffffff 0%, ${award.boxColor} 60%, #fff7ed 100%)`,
-                borderColor: `${award.accentColor}88`,
-                boxShadow: `0 14px 34px -8px ${award.accentColor}44`,
+                background: `radial-gradient(circle at 50% 30%, ${award.ribbonColor}aa, transparent 70%)`,
+              }}
+            />
+
+            {/* Vertical Ribbon */}
+            <div
+              className="absolute inset-x-0 top-0 bottom-0 w-4 sm:w-5 mx-auto shadow-sm"
+              style={{
+                background: `linear-gradient(180deg, ${award.ribbonColor}, ${award.accentColor})`,
+              }}
+            />
+
+            {/* Horizontal Ribbon */}
+            <div
+              className="absolute inset-y-0 left-0 right-0 h-4 sm:h-5 my-auto shadow-sm"
+              style={{
+                background: `linear-gradient(90deg, ${award.ribbonColor}, ${award.accentColor})`,
+              }}
+            />
+
+            {/* 3D Wrapped Bow Centerpiece */}
+            <div
+              className="relative z-10 w-9 h-9 sm:w-11 sm:h-11 rounded-full flex items-center justify-center text-lg sm:text-xl shadow-md border-2"
+              style={{
+                background: `linear-gradient(135deg, #ffffff 0%, ${award.boxColor} 100%)`,
+                borderColor: award.accentColor,
               }}
             >
-              {/* Cute Washi Tape at top */}
-              <div className="washi-tape-yellow w-16 -top-2 left-1/2 -translate-x-1/2 absolute z-10" />
-
-              {/* Internal burst particles */}
-              <div
-                className="absolute inset-0 opacity-30 pointer-events-none"
-                style={{
-                  background: `radial-gradient(circle at 50% 50%, ${award.ribbonColor}, transparent 80%)`,
-                }}
-              />
-
-              {/* Custom theme illustration */}
-              <AwardArtwork awardId={award.id} />
-
-              {/* Small ribbon badge & certificate sticker */}
-              <div className="mt-3 flex items-center gap-1.5 z-10">
-                <span
-                  className="text-[10px] font-black tracking-widest uppercase px-2.5 py-0.5 rounded-full"
-                  style={{
-                    backgroundColor: `${award.accentColor}18`,
-                    color: award.accentColor,
-                  }}
-                >
-                  {award.ribbonLabel}
-                </span>
-                {award.sticker && (
-                  <span className="text-[10px] font-black bg-pink-100 text-pink-700 px-2 py-0.5 rounded-full border border-pink-200 shadow-sm font-fun">
-                    {award.sticker}
-                  </span>
-                )}
-              </div>
+              🎁
             </div>
 
-            {/* Award Title and Description ONLY RENDERED AFTER OPENING */}
-            <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.25, duration: 0.5 }}
-              className="mt-4 sm:mt-5 text-center px-2 max-w-full w-full"
+            {/* Tap pulse hint */}
+            <div className="absolute bottom-1 inset-x-0 text-center z-10 pointer-events-none">
+              <span className="text-[9px] font-bold tracking-wider text-purple-700/80 uppercase font-fun">
+                TAP ME
+              </span>
+            </div>
+          </>
+        ) : (
+          /* ================= ALREADY OPENED STATE ================= */
+          <div className="flex flex-col items-center justify-center p-2 text-center w-full h-full relative">
+            {/* Open Box Lid tilted slightly */}
+            <div
+              className="absolute -top-1 right-1 text-[11px] font-black px-1.5 py-0.5 rounded-full bg-white/90 shadow border"
+              style={{ color: award.accentColor, borderColor: `${award.accentColor}44` }}
             >
-              <h3
-                className="font-bold text-base sm:text-lg tracking-wide mb-1.5"
-                style={{ color: award.accentColor }}
-              >
-                {award.title}
-              </h3>
-              <p className="text-gray-600 text-xs sm:text-sm leading-relaxed max-w-xs">
-                {award.message}
-              </p>
+              OPEN
+            </div>
+
+            {/* Award Icon inside */}
+            <motion.div
+              initial={{ scale: 0.8 }}
+              animate={{ scale: 1 }}
+              className="p-2 sm:p-2.5 rounded-xl shadow border mb-1 flex items-center justify-center"
+              style={{
+                background:
+                  award.id === 1
+                    ? "linear-gradient(135deg, #fef08a 0%, #facc15 100%)"
+                    : award.id === 2
+                    ? "linear-gradient(135deg, #ddd6fe 0%, #a855f7 100%)"
+                    : "linear-gradient(135deg, #a7f3d0 0%, #10b981 100%)",
+                borderColor:
+                  award.id === 1 ? "#f59e0b" : award.id === 2 ? "#9333ea" : "#059669",
+              }}
+            >
+              {renderOpenIcon()}
             </motion.div>
-          </motion.div>
+
+            {/* Short label */}
+            <span
+              className="text-[10px] font-bold line-clamp-1 leading-tight font-fun"
+              style={{ color: award.accentColor }}
+            >
+              {award.emoji} View
+            </span>
+          </div>
         )}
-      </AnimatePresence>
-    </motion.div>
+      </div>
+
+      {/* Label under the box */}
+      <div className="mt-2 text-center">
+        <span
+          className="text-[10px] sm:text-xs font-bold tracking-wider uppercase px-2 py-0.5 rounded-full shadow-xs"
+          style={{
+            backgroundColor: isOpened ? `${award.accentColor}18` : "#ffffffbb",
+            color: isOpened ? award.accentColor : "#6b7280",
+            border: `1px solid ${isOpened ? award.accentColor + "44" : "#e5e7eb"}`,
+          }}
+        >
+          {award.ribbonLabel}
+        </span>
+      </div>
+    </motion.button>
   );
 }

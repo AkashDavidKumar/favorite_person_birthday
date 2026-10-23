@@ -51,15 +51,6 @@ export default function MemoryMuseumScene({ onNext }) {
             transition={{ duration: 0.5 }}
             className="text-center mb-6 sm:mb-8 relative"
           >
-            <div className="flex justify-center gap-2 mb-2">
-              <FloatingSticker rotation={-4} color="mint" className="text-xs">
-                ARCHIVE OF BEST MEMORIES 📂
-              </FloatingSticker>
-              <FloatingSticker rotation={3} color="pink" className="text-xs hidden sm:inline-flex">
-                100% UNFILTERED 🎀
-              </FloatingSticker>
-            </div>
-
             <span className="text-3xl sm:text-4xl" aria-hidden="true">
               🖼️
             </span>

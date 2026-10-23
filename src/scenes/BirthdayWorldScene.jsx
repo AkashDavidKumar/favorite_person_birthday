@@ -15,13 +15,13 @@ export default function BirthdayWorldScene({ onNext }) {
       <MagicBackground theme="universe" />
 
       {/* Floating Sticker Badges for Playful Scrapbook Feel */}
-      <div className="absolute top-6 left-4 sm:left-12 z-20 hidden xs:block">
+      <div className="absolute top-6 left-4 sm:left-12 z-20 hidden sm:block">
         <FloatingSticker rotation={-5} color="pink">
           MAIN CHARACTER ENERGY ✨
         </FloatingSticker>
       </div>
 
-      <div className="absolute top-6 right-4 sm:right-12 z-20 hidden xs:block">
+      <div className="absolute top-6 right-4 sm:right-12 z-20 hidden sm:block">
         <FloatingSticker rotation={4} color="yellow">
           🚨 BIRTHDAY DETECTED! 💗
         </FloatingSticker>

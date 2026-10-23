@@ -6,42 +6,22 @@ import { useReducedMotionPreference } from "../hooks/useReducedMotionPreference"
 export default function LetterCard({
   opening,
   paragraphs,
-  signature,
-  senderName,
   onContinue,
 }) {
   const prefersReduced = useReducedMotionPreference();
-  const [unrolled, setUnrolled] = useState(prefersReduced);
+  // State: "rolled" -> "unrolling" -> "unrolled"
+  const [scrollState, setScrollState] = useState(prefersReduced ? "unrolled" : "rolled");
   const [revealedCount, setRevealedCount] = useState(prefersReduced ? 999 : 0);
   const [showSignature, setShowSignature] = useState(prefersReduced);
   const [showProceedButton, setShowProceedButton] = useState(prefersReduced);
 
   const allContent = [opening, ...paragraphs];
   const totalItems = allContent.length;
+  const bottomMarkerRef = useRef(null);
 
-  const userHasScrolledUpRef = useRef(false);
-  const lastScrollYRef = useRef(0);
-  const latestItemRef = useRef(null);
-
-  // Detect if user manually scrolls upward to avoid forcing viewport down
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScroll = window.scrollY || document.documentElement.scrollTop;
-      if (currentScroll < lastScrollYRef.current - 35) {
-        // User scrolled upward by more than 35px
-        userHasScrolledUpRef.current = true;
-      }
-      lastScrollYRef.current = currentScroll;
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  // Automatic paragraph-by-paragraph reveal sequence
   useEffect(() => {
     if (prefersReduced) {
-      setUnrolled(true);
+      setScrollState("unrolled");
       setRevealedCount(totalItems);
       setShowSignature(true);
       setShowProceedButton(true);
@@ -50,16 +30,23 @@ export default function LetterCard({
 
     const timers = [];
 
-    // 1. Unroll the royal scroll
+    // 1. Start unrolling after brief initial appearance
     timers.push(
       setTimeout(() => {
-        setUnrolled(true);
-      }, 350)
+        setScrollState("unrolling");
+      }, 400)
     );
 
-    // 2. Reveal each item sequentially at a comfortable reading pace (~1.5s per paragraph)
+    // 2. Finish scroll unroll physically after 1.2s
+    timers.push(
+      setTimeout(() => {
+        setScrollState("unrolled");
+      }, 1600)
+    );
+
+    // 3. Progressively reveal paragraphs at comfortable pace (~1.2s each)
     allContent.forEach((_, index) => {
-      const delay = 800 + index * 1500;
+      const delay = 1600 + index * 1200;
       timers.push(
         setTimeout(() => {
           setRevealedCount((prev) => Math.max(prev, index + 1));
@@ -67,16 +54,16 @@ export default function LetterCard({
       );
     });
 
-    // 3. Reveal signature after final paragraph
-    const signatureDelay = 800 + totalItems * 1500 + 400;
+    // 4. Reveal signature
+    const signatureDelay = 1600 + totalItems * 1200 + 400;
     timers.push(
       setTimeout(() => {
         setShowSignature(true);
       }, signatureDelay)
     );
 
-    // 4. Reveal "Proceed to Farewell 💖" button only after signature finishes appearing
-    const buttonDelay = signatureDelay + 800;
+    // 5. Reveal final button: "Proceed to Farewell ✨"
+    const buttonDelay = signatureDelay + 700;
     timers.push(
       setTimeout(() => {
         setShowProceedButton(true);
@@ -88,107 +75,102 @@ export default function LetterCard({
     };
   }, [prefersReduced, totalItems]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Auto-scroll newly revealed paragraph into view if user hasn't scrolled up
-  useEffect(() => {
-    if (!prefersReduced && revealedCount > 1 && !userHasScrolledUpRef.current) {
-      latestItemRef.current?.scrollIntoView({
-        behavior: "smooth",
-        block: "nearest",
-      });
-    }
-  }, [revealedCount, prefersReduced]);
+  const isRolled = scrollState === "rolled";
+  const isUnrollingOrUnrolled = scrollState === "unrolling" || scrollState === "unrolled";
 
   return (
-    <div className="relative max-w-2xl mx-auto w-full px-2 sm:px-4 py-4">
+    <div className="relative max-w-xl mx-auto w-full px-2 sm:px-4 py-2 select-none">
 
       {/* ─── TOP DOWEL ROD (Wood & Gold Finials) ─── */}
-      <div className="relative z-30 flex items-center justify-between mx-auto w-[96%] sm:w-[98%] -mb-3 drop-shadow-md">
+      <motion.div
+        initial={prefersReduced ? { y: 0 } : { y: 14 }}
+        animate={isUnrollingOrUnrolled ? { y: 0 } : { y: 14 }}
+        transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
+        className="relative z-30 flex items-center justify-between mx-auto w-[96%] sm:w-[98%] -mb-2.5 drop-shadow-md"
+      >
         {/* Left Finial Knob */}
         <div
-          className="w-7 h-7 sm:w-9 sm:h-9 rounded-full shadow-lg border border-amber-500/60"
+          className="w-7 h-7 sm:w-8 sm:h-8 rounded-full shadow-lg border border-amber-500/70 shrink-0"
           style={{
             background: "radial-gradient(circle at 35% 35%, #fef08a 0%, #d97706 65%, #78350f 100%)",
           }}
         />
         {/* Main Dowel Spindle */}
         <div
-          className="flex-1 h-5 sm:h-6 rounded-full shadow-inner border-y border-amber-700/50 -mx-1"
+          className="flex-1 h-5 sm:h-5.5 rounded-full shadow-inner border-y border-amber-700/60 -mx-1"
           style={{
             background: "linear-gradient(180deg, #b45309 0%, #78350f 40%, #92400e 70%, #d97706 100%)",
           }}
         />
         {/* Right Finial Knob */}
         <div
-          className="w-7 h-7 sm:w-9 sm:h-9 rounded-full shadow-lg border border-amber-500/60"
+          className="w-7 h-7 sm:w-8 sm:h-8 rounded-full shadow-lg border border-amber-500/70 shrink-0"
           style={{
             background: "radial-gradient(circle at 35% 35%, #fef08a 0%, #d97706 65%, #78350f 100%)",
           }}
         />
-      </div>
+      </motion.div>
 
-      {/* ─── UNROLLING PARCHMENT BODY ─── */}
+      {/* ─── CONTINUOUS PARCHMENT BODY UNROLLING ─── */}
       <motion.div
-        initial={{ scaleY: prefersReduced ? 1 : 0.15, opacity: prefersReduced ? 1 : 0.6 }}
-        animate={unrolled ? { scaleY: 1, opacity: 1 } : { scaleY: 0.15, opacity: 0.6 }}
-        transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
-        style={{ transformOrigin: "top center" }}
+        initial={prefersReduced ? { height: "auto", opacity: 1 } : { height: 28, opacity: 0.95 }}
+        animate={
+          isUnrollingOrUnrolled
+            ? { height: "auto", opacity: 1 }
+            : { height: 28, opacity: 0.95 }
+        }
+        transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
         className="relative z-20 rounded-md overflow-hidden shadow-2xl"
       >
         {/* Royal Parchment Paper Styling */}
         <div
-          className="relative px-4 py-6 sm:px-10 sm:py-10 text-amber-950 border-x-2 sm:border-x-4 border-amber-200/80"
+          className="relative px-4 py-6 sm:px-8 sm:py-8 text-amber-950 border-x-2 sm:border-x-3 border-amber-300/80"
           style={{
             background: "linear-gradient(180deg, #fefae0 0%, #fbf3d5 40%, #faecd0 80%, #f7e6c4 100%)",
-            boxShadow: "inset 0 0 45px rgba(180, 83, 9, 0.12), 0 20px 50px -10px rgba(74, 30, 8, 0.22)",
+            boxShadow: "inset 0 0 35px rgba(180, 83, 9, 0.12), 0 15px 40px -10px rgba(74, 30, 8, 0.22)",
           }}
         >
           {/* Ornamental Inner Border Frame */}
-          <div className="absolute inset-2 sm:inset-4 border border-amber-700/25 rounded pointer-events-none" />
-          <div className="absolute inset-2.5 sm:inset-5 border border-dashed border-amber-600/20 rounded pointer-events-none" />
+          <div className="absolute inset-2 sm:inset-3 border border-amber-700/20 rounded pointer-events-none" />
+          <div className="absolute inset-2.5 sm:inset-4 border border-dashed border-amber-600/15 rounded pointer-events-none" />
 
-          {/* Royal Seal & Header Crest */}
-          <div className="flex flex-col items-center mb-6 sm:mb-8 relative">
-            {/* Wax Seal Stamp */}
+          {/* Royal Seal Stamp */}
+          <div className="flex flex-col items-center mb-5 relative">
             <div
-              className="w-13 h-13 sm:w-14 sm:h-14 rounded-full flex items-center justify-center text-white shadow-xl relative border-2 border-red-800"
+              className="w-12 h-12 rounded-full flex items-center justify-center text-white shadow-xl relative border-2 border-red-800"
               style={{
                 background: "radial-gradient(circle at 40% 35%, #ef4444 0%, #b91c1c 55%, #7f1d1d 100%)",
-                boxShadow: "0 6px 18px rgba(185, 28, 28, 0.4), inset 0 2px 4px rgba(255,255,255,0.4)",
+                boxShadow: "0 4px 14px rgba(185, 28, 28, 0.4), inset 0 2px 4px rgba(255,255,255,0.4)",
               }}
             >
-              <span className="text-2xl drop-shadow">👑</span>
-              {/* Ribbon tails hanging from wax seal */}
-              <div className="absolute -bottom-3 -left-1 w-2.5 h-4 bg-red-700 -rotate-12 shadow" />
-              <div className="absolute -bottom-3 -right-1 w-2.5 h-4 bg-red-700 rotate-12 shadow" />
+              <span className="text-xl drop-shadow">👑</span>
             </div>
 
-            <p className="mt-5 font-display font-semibold text-[11px] sm:text-xs tracking-[0.25em] uppercase text-amber-800/80">
+            <p className="mt-3 font-display font-bold text-[10px] sm:text-xs tracking-[0.25em] uppercase text-amber-800/80">
               Royal Birthday Decree
             </p>
-            <div className="w-24 h-0.5 bg-gradient-to-r from-transparent via-amber-600/40 to-transparent mt-1" />
+            <div className="w-20 h-0.5 bg-gradient-to-r from-transparent via-amber-600/40 to-transparent mt-1" />
           </div>
 
-          {/* Letter Content — Sequentially revealed */}
-          <div className="space-y-5 sm:space-y-6 text-base sm:text-lg leading-relaxed relative z-10 font-serif">
+          {/* Progressively Revealed Letter Content */}
+          <div className="space-y-4 sm:space-y-5 text-sm sm:text-base leading-relaxed relative z-10 font-serif">
             {allContent.map((text, i) => {
               const isRevealed = i < revealedCount;
-              const isCurrent = i === revealedCount - 1;
 
               return (
                 <motion.div
                   key={i}
-                  ref={isCurrent ? latestItemRef : null}
-                  initial={{ opacity: 0, y: prefersReduced ? 0 : 10 }}
-                  animate={isRevealed ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
-                  transition={{ duration: 0.6, ease: "easeOut" }}
+                  initial={{ opacity: 0, y: prefersReduced ? 0 : 8 }}
+                  animate={isRevealed ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
+                  transition={{ duration: 0.5, ease: "easeOut" }}
                   className={isRevealed ? "block" : "hidden"}
                 >
                   {i === 0 ? (
-                    <h3 className="font-display font-bold text-xl sm:text-2xl text-amber-900 leading-snug text-center mb-5 sm:mb-6">
+                    <h3 className="font-display font-black text-lg sm:text-xl text-amber-900 leading-snug text-center mb-4">
                       {text}
                     </h3>
                   ) : (
-                    <p className="text-amber-950/90 leading-relaxed indent-4 text-justify font-normal">
+                    <p className="text-amber-950/90 leading-relaxed text-left font-normal">
                       {text}
                     </p>
                   )}
@@ -196,72 +178,84 @@ export default function LetterCard({
               );
             })}
 
-            {/* ─── SENDER SIGNATURE (Appears at very end after all paragraphs) ─── */}
+            {/* ─── SENDER SIGNATURE: Akash ❤️ ─── */}
             <AnimatePresence>
               {showSignature && (
                 <motion.div
-                  initial={{ opacity: 0, y: prefersReduced ? 0 : 12 }}
+                  initial={{ opacity: 0, y: prefersReduced ? 0 : 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.7 }}
-                  className="pt-6 sm:pt-8 mt-6 border-t border-amber-600/30 flex flex-col items-end"
+                  transition={{ duration: 0.6 }}
+                  className="pt-4 mt-5 border-t border-amber-600/25 flex flex-col items-end"
                 >
-                  <p className="text-xs sm:text-sm text-amber-800 italic mb-1 font-serif">
-                    {signature}
+                  <p className="text-xs text-amber-800 italic mb-0.5 font-serif">
+                    With lots of love and friendship,
                   </p>
-                  <p className="font-script text-3xl sm:text-4xl text-amber-900 font-bold tracking-wide">
-                    {senderName}
+                  <p className="font-script text-2xl sm:text-3xl text-amber-900 font-bold tracking-wide">
+                    Akash ❤️
                   </p>
-                  <div className="w-32 h-0.5 bg-gradient-to-l from-amber-700 via-amber-400 to-transparent mt-1 mr-1" />
-                  <span className="text-xl mt-1 text-red-600">❤️</span>
                 </motion.div>
               )}
             </AnimatePresence>
           </div>
 
-          {/* ─── FINAL PRIMARY BUTTON: "Proceed to Farewell 💖" ─── */}
-          {/* Strictly hidden until entire letter and signature finish revealing */}
+          {/* ─── FINAL BUTTON: "Proceed to Farewell ✨" ─── */}
+          {/* Strictly appears only after letter and signature finish revealing */}
           <AnimatePresence>
             {showProceedButton && (
               <motion.div
-                initial={{ opacity: 0, y: 14 }}
+                initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, ease: "easeOut" }}
-                className="mt-6 sm:mt-8 pt-5 pb-2 border-t border-amber-600/20 flex justify-center relative z-10 px-2"
+                transition={{ duration: 0.5, ease: "easeOut" }}
+                className="mt-6 pt-4 border-t border-amber-600/20 flex justify-center relative z-10 px-2"
               >
-                <PrimaryButton onClick={onContinue} className="w-full sm:w-auto max-w-[280px] sm:max-w-[320px]">
-                  <span className="inline-block whitespace-nowrap text-xs sm:text-base">
-                    Proceed to Farewell 💖
+                <PrimaryButton onClick={onContinue} className="w-full sm:w-auto">
+                  <span className="inline-block whitespace-nowrap">
+                    Proceed to Farewell ✨
                   </span>
                 </PrimaryButton>
               </motion.div>
             )}
           </AnimatePresence>
 
+          <div ref={bottomMarkerRef} />
         </div>
       </motion.div>
 
       {/* ─── BOTTOM DOWEL ROD (Wood & Gold Finials) ─── */}
-      <div className="relative z-30 flex items-center justify-between mx-auto w-[96%] sm:w-[98%] -mt-3 drop-shadow-md">
+      <motion.div
+        initial={prefersReduced ? { y: 0 } : { y: -14 }}
+        animate={isUnrollingOrUnrolled ? { y: 0 } : { y: -14 }}
+        transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
+        className="relative z-30 flex items-center justify-between mx-auto w-[96%] sm:w-[98%] -mt-2.5 drop-shadow-md"
+      >
         <div
-          className="w-7 h-7 sm:w-9 sm:h-9 rounded-full shadow-lg border border-amber-500/60"
+          className="w-7 h-7 sm:w-8 sm:h-8 rounded-full shadow-lg border border-amber-500/70 shrink-0"
           style={{
             background: "radial-gradient(circle at 35% 35%, #fef08a 0%, #d97706 65%, #78350f 100%)",
           }}
         />
         <div
-          className="flex-1 h-5 sm:h-6 rounded-full shadow-inner border-y border-amber-700/50 -mx-1"
+          className="flex-1 h-5 sm:h-5.5 rounded-full shadow-inner border-y border-amber-700/60 -mx-1"
           style={{
             background: "linear-gradient(180deg, #b45309 0%, #78350f 40%, #92400e 70%, #d97706 100%)",
           }}
         />
         <div
-          className="w-7 h-7 sm:w-9 sm:h-9 rounded-full shadow-lg border border-amber-500/60"
+          className="w-7 h-7 sm:w-8 sm:h-8 rounded-full shadow-lg border border-amber-500/70 shrink-0"
           style={{
             background: "radial-gradient(circle at 35% 35%, #fef08a 0%, #d97706 65%, #78350f 100%)",
           }}
         />
-      </div>
+      </motion.div>
 
+      {/* Rolled State Tap Hint (if user arrives before auto-unroll) */}
+      {isRolled && !prefersReduced && (
+        <div className="text-center mt-3">
+          <span className="text-xs font-semibold text-amber-800/80 bg-amber-100/90 px-3 py-1 rounded-full border border-amber-200">
+            Unrolling decree... 📜✨
+          </span>
+        </div>
+      )}
     </div>
   );
 }

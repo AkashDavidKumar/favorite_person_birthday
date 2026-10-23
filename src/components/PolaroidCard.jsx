@@ -38,7 +38,7 @@ export default function PolaroidCard({
       }}
       whileTap={{ scale: 0.97 }}
       transition={{ duration: 0.45, delay: index * 0.06 }}
-      className="bg-white p-3 pb-4 rounded-xl cursor-pointer relative group text-left transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 w-full max-w-[270px] sm:max-w-[260px] mx-auto box-border border border-pink-100/80"
+      className="bg-white p-3 pb-4 rounded-xl cursor-pointer relative group text-left transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 w-full max-w-[255px] sm:max-w-[260px] mx-auto box-border border border-pink-100/80"
       style={{
         boxShadow: "0 10px 25px -4px rgba(79, 70, 229, 0.12), 0 4px 10px -2px rgba(0, 0, 0, 0.05)",
         background: "linear-gradient(180deg, #ffffff 0%, #fffdfa 100%)",
@@ -52,7 +52,7 @@ export default function PolaroidCard({
       {/* Scrapbook Corner Sticker if available */}
       {memory.sticker && (
         <div
-          className="absolute -bottom-2 -right-2 z-10 px-2 py-0.5 rounded-full text-[10px] font-black tracking-wider uppercase shadow-md border border-white/80 pointer-events-none transform rotate-3"
+          className="absolute bottom-1.5 right-1.5 z-10 px-2 py-0.5 rounded-full text-[10px] font-black tracking-wider uppercase shadow-md border border-white/80 pointer-events-none transform rotate-2"
           style={{
             background: "linear-gradient(135deg, #fce7f3 0%, #ede9fe 100%)",
             color: "#831843",

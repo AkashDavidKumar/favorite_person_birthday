@@ -1,106 +1,94 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { birthday } from "../data/birthday";
 import BirthdayCake from "../components/BirthdayCake";
 import PrimaryButton from "../components/PrimaryButton";
 import MagicBackground from "../components/MagicBackground";
-import FloatingSticker from "../components/FloatingSticker";
 
 export default function BirthdayChallengeScene({ onNext }) {
-  const [challengeComplete, setChallengeComplete] = useState(false);
+  const [isBlown, setIsBlown] = useState(false);
+
+  const handleCandleBlown = () => {
+    setIsBlown(true);
+  };
 
   return (
     <div
-      className="min-h-screen w-full px-4 py-16 sm:px-8 flex flex-col items-center justify-center relative overflow-hidden"
+      className="min-h-[100svh] min-h-screen w-full px-3 py-4 sm:py-8 flex flex-col items-center justify-between relative overflow-hidden select-none"
       style={{
         background: "linear-gradient(160deg, #fff7ed 0%, #fde68a18 40%, #fce7f3 100%)",
       }}
     >
       <MagicBackground theme="cake" />
 
-      {/* Playful Scrapbook stickers */}
-      <div className="absolute top-6 left-6 z-20 hidden sm:block">
-        <FloatingSticker rotation={-4} color="yellow">
-          100% CALORIE-FREE 🍰
-        </FloatingSticker>
-      </div>
-      <div className="absolute top-6 right-6 z-20 hidden sm:block">
-        <FloatingSticker rotation={5} color="mint">
-          WISH GUARANTEE CERTIFIED ✨
-        </FloatingSticker>
-      </div>
-
-      <div className="relative z-10 max-w-3xl w-full mx-auto text-center flex flex-col items-center">
-        {/* Heading */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
+      {/* Main Content Container — Vertically Centered */}
+      <div className="relative z-10 max-w-md w-full mx-auto text-center flex flex-col items-center my-auto">
+        {/* 1. Small Birthday Heading */}
+        <motion.h2
+          initial={{ opacity: 0, y: -12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="mb-6"
+          transition={{ duration: 0.5 }}
+          className="font-display font-black text-xl sm:text-2xl text-purple-900 leading-tight mb-1"
         >
-          <span className="text-4xl mb-1 inline-block" aria-hidden="true">🎂</span>
-          <h2 className="font-display font-black text-3xl sm:text-4xl text-purple-900 mb-2">
-            {birthday.challengeTitle}
-          </h2>
-          <p className="text-purple-600 font-script text-xl sm:text-2xl mb-1">
-            For Harshini 🌟
-          </p>
-          <p className="text-gray-600 text-sm sm:text-base max-w-md mx-auto leading-relaxed font-fun">
-            {birthday.challengeSubtext}
-          </p>
-        </motion.div>
+          Birthday girl, your mission is simple! 🎂
+        </motion.h2>
 
-        {/* Cake Container */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.2, duration: 0.6 }}
-          className="flex justify-center mb-6 w-full"
+        {/* 2. Short Subtitle addressed to Harshini */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.15, duration: 0.5 }}
+          className="text-purple-600 font-script text-lg sm:text-xl mb-3 sm:mb-4"
         >
-          <BirthdayCake onAllExtinguished={() => setChallengeComplete(true)} />
-        </motion.div>
+          Harshini, make a wish and keep it secret. 🤫
+        </motion.p>
 
-        {/* Challenge complete banner */}
-        <AnimatePresence>
-          {challengeComplete && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.85, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ duration: 0.5, type: "spring" }}
-              className="mb-8 p-6 rounded-3xl mx-auto max-w-sm shadow-xl"
-              style={{
-                background: "linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%)",
-                border: "2px solid #86efac88",
-                boxShadow: "0 10px 30px rgba(134,239,172,0.25)",
-              }}
-            >
-              <p className="text-3xl mb-2" aria-hidden="true">
-                ✨💖✨
-              </p>
-              <p className="font-bold text-emerald-800 text-lg">
-                {birthday.challengeCompletedTitle}
-              </p>
-              <p className="text-emerald-600 text-sm mt-1 font-medium">
-                {birthday.challengeCompletedSubtext}
-              </p>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {/* 3. Cake Stand and Cake Illustration with One Candle */}
+        <div className="w-full flex justify-center my-1">
+          <BirthdayCake onCandleBlown={handleCandleBlown} isExtinguished={isBlown} />
+        </div>
 
-        {/* Continue button — revealed after completion */}
-        <AnimatePresence>
-          {challengeComplete && (
-            <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.5 }}
-            >
-              <PrimaryButton onClick={onNext} className="w-full sm:w-auto">
-                <span className="inline-block whitespace-nowrap">Read My Letter to You 💌</span>
-              </PrimaryButton>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {/* 4. Dedicated Instruction / Result Area (Right below cake, strictly in viewport) */}
+        <div className="w-full min-h-[5.5rem] flex flex-col items-center justify-center mt-2 px-2">
+          <AnimatePresence mode="wait">
+            {!isBlown ? (
+              /* Instruction before blowing */
+              <motion.div
+                key="instruction"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="flex flex-col items-center"
+              >
+                <p className="text-xs sm:text-sm font-semibold text-purple-700 bg-purple-100/80 px-3.5 py-1.5 rounded-full border border-purple-200 shadow-2xs font-fun">
+                  Tap the candle to blow it out! 🕯️✨
+                </p>
+              </motion.div>
+            ) : (
+              /* Success Result Area displayed immediately beside/below cake */
+              <motion.div
+                key="success-result"
+                initial={{ opacity: 0, scale: 0.9, y: 10 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ duration: 0.4, type: "spring", stiffness: 240 }}
+                className="w-full flex flex-col items-center text-center"
+              >
+                <p className="font-display font-black text-lg sm:text-xl text-purple-900 leading-tight">
+                  Wish submitted successfully! ✨
+                </p>
+                <p className="text-xs sm:text-sm text-pink-600 font-medium mt-0.5 mb-3 font-fun">
+                  May all your wishes come true, Harshini. ❤️
+                </p>
+
+                {/* Prominent Next Action Button */}
+                <div className="w-full flex justify-center px-2">
+                  <PrimaryButton onClick={onNext} className="w-full sm:w-auto">
+                    <span className="inline-block whitespace-nowrap">Read My Letter to You 💌</span>
+                  </PrimaryButton>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
     </div>
   );
